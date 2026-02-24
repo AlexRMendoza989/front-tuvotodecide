@@ -170,6 +170,50 @@ const Login: React.FC = () => {
   // };
 
   const onSubmit = async (values: typeof initialValues) => {
+    // === MODO DESARROLLADOR / MOCK LOGIN ===
+    let mockUser: any = null;
+    const isMockPassword = values.password === "test1234" || values.password === "Admin123!";
+
+    if (isMockPassword) {
+      if (values.email === "alcalde@test.com") {
+        mockUser = {
+          id: "mock-alcalde-lp",
+          name: "ALCALDE LA PAZ",
+          email: values.email,
+          role: "MAYOR",
+          status: "ACTIVE",
+          active: true,
+          departmentId: "6740f90766c62c3e1e2474f8", // ID La Paz
+          municipalityId: "674100be66c62c3e1e247b97", // ID Nuestra Señora de La Paz
+        };
+      } else if (values.email === "gobernador@test.com" || values.email === "gober@test.com") {
+        mockUser = {
+          id: "mock-gober-lp",
+          name: "GOBERNADOR LA PAZ",
+          email: values.email,
+          role: "GOVERNOR",
+          status: "ACTIVE",
+          active: true,
+          departmentId: "6740f90766c62c3e1e2474f8", // ID La Paz
+        };
+      } else if (values.email === "admin@test.com") {
+        mockUser = {
+          id: "mock-admin",
+          name: "ADMINISTRADOR",
+          email: values.email,
+          role: "SUPERADMIN",
+          status: "ACTIVE",
+          active: true,
+        };
+      }
+
+      if (mockUser) {
+        dispatch(setAuth({ access_token: "mock_jwt_token_dev", user: mockUser }));
+        return;
+      }
+    }
+    // =======================================
+
     try {
       // 1) login
       const res = await loginUser(values).unwrap();
